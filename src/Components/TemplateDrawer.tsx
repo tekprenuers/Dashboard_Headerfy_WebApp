@@ -7,6 +7,7 @@ import Draw from "./Draw/Draw";
 import Upload from "./Upload/Upload";
 import Elements from "./Elements/Elements";
 import Text from "./Text/Text";
+import EnterBusinessDetails from "./BusinessDetailsModal/EnterBusinessDetails";
 
 const TemplateDrawer: React.FC = () => {
   const { isTemplateOpen, setIsTemplateOpen, selectedTemplate, setSelectedTemplate } = useTemplate(); // Get drawer state
