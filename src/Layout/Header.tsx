@@ -1,12 +1,20 @@
-import React from "react";
+import React,{useState} from "react";
 import { FiSearch } from "react-icons/fi";
 import { HiMiniArrowUturnLeft, HiMiniArrowUturnRight } from "react-icons/hi2";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { PiCrownLight, PiShareFatThin } from "react-icons/pi";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import EnterBusinessDetails from "../Components/BusinessDetailsModal/EnterBusinessDetails";
 
 const Header: React.FC = () => {
+  const [showBusinessDetails,setShowBusinessDetails] = useState(false);
+ 
+  const toggleBusinessDetails  = () =>{
+    setShowBusinessDetails(!showBusinessDetails);
+  }
+
   return (
+    <>
     <div className="flex items-center justify-between bg-[#003366] py-4 text-white">
       {/* Left Side: Name & Controls */}
       <div className="flex items-center gap-1">
@@ -47,8 +55,8 @@ const Header: React.FC = () => {
           </button>
           <RiArrowDropDownLine size={24} className="cursor-pointer" />
         </div>
-        <button className="border p-2 rounded-md transform scale-x-[-1]">
-          <IoChatbubbleOutline size={20} className="" />
+        <button className="border p-2 rounded-md transform scale-x-[-1] cursor-pointer" >
+          <IoChatbubbleOutline size={20} className="" onClick={toggleBusinessDetails}/>
         </button>
         <button className="px-3 flex py-2 bg-[#FF5733] gap-1 rounded-md text-white text-sm font-medium">
           <PiShareFatThin size={20} />
@@ -60,7 +68,15 @@ const Header: React.FC = () => {
         </button>
       </div>
     </div>
+    {/* Modal for Business Details */}
+      {showBusinessDetails && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <EnterBusinessDetails onClose={toggleBusinessDetails} />
+        </div>
+      )}
+    </>
   );
+  // showBusinessDetails && <EnterBusinessDetails/>
 };
 
 export default Header;
