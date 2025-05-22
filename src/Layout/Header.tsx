@@ -76,7 +76,7 @@ const Header: React.FC = () => {
       )}
     </>
   );
-  // showBusinessDetails && <EnterBusinessDetails/>
+  
 };
 
 export default Header;
