@@ -8,7 +8,7 @@ interface EnterBusinessDetailsProps {
 const EnterBusinessDetails: React.FC<EnterBusinessDetailsProps> = ({ onClose }) => {
   return (
     <div className="relative opacity-100">
-      <div className="w-[811px] h-[100vh] bg-white rounded-[15px] p-6 flex flex-col justify-center">
+      <div className="w-[811px] h-[auto] bg-white rounded-[15px] p-6 flex flex-col justify-center">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
