@@ -22,17 +22,17 @@ const TemplateDrawer: React.FC = () => {
         - overflow-y-auto makes the content scrollable 
       */}
       <div
-        className={`absolute top-0 left-0 h-screen w-74 bg-[#003366F0] border-r z-10
-          shadow-md transform transition-transform duration-300 overflow-y-auto
+        className={`absolute top-0  left-0 h-full w-74 bg-[#003366F0] border-r z-10
+          shadow-md transform transition-transform duration-300 
           ${isTemplateOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="">
-          <h2 className="p-4 font-semibold text-lg text-white"></h2>
-          <div className="p-4 text-white ">
+        <div className="h-full overflow-y-auto">
+          <h2 className="p-1 font-semibold text-lg text-white"></h2>
+          <div className="p-3 text-white">
             {/* Show bars only if selected */}
             {selectedTemplate === "Template" && <Template_1 />}
             {selectedTemplate === "Element" && <Elements />}
-            {selectedTemplate === "Text" && <Text/>}
+            {selectedTemplate === "Text" && <Text />}
             {selectedTemplate === "Upload" && <Upload />}
             {selectedTemplate === "Draw" && <Draw />}
             {selectedTemplate === "Projects" && <Projects />}
@@ -57,11 +57,7 @@ const TemplateDrawer: React.FC = () => {
         className={`
           absolute top-50 bg-[#003366] border border-l-transparent border-[#003366f] text-white py-4 px-3 z-30
           transition-transform duration-300
-          ${
-            isTemplateOpen
-              ? "translate-x-74"
-              : "translate-x-0 "
-          }
+          ${isTemplateOpen ? "translate-x-74" : "translate-x-0 "}
         `}
         style={{
           clipPath: "polygon(0% 0%, 100% 20%, 100% 80%, 0% 100%)",
