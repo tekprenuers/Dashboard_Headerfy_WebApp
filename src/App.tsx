@@ -14,7 +14,6 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<MainLayout />}>
       <Route path="/" element={<MainDashboard />} />
-    
      </Route>
   )
 );
