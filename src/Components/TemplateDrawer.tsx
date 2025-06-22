@@ -9,12 +9,12 @@ import Elements from "./Elements/Elements";
 import Text from "./Text/Text";
 
 const TemplateDrawer: React.FC = () => {
-  const { isTemplateOpen, setIsTemplateOpen, selectedTemplate, setSelectedTemplate } = useTemplate(); // Get drawer state
+  const { isTemplateOpen, setIsTemplateOpen, selectedTemplate, setSelectedTemplate } = useTemplate();
 
  
 
   return (
-    <div>
+    <div className="">
       {/* 
         Drawer Panel 
         - fixed to the left, full height (h-screen), width 16rem (w-64)
@@ -22,21 +22,25 @@ const TemplateDrawer: React.FC = () => {
         - overflow-y-auto makes the content scrollable 
       */}
       <div
-        className={`absolute top-0  left-0 h-full w-74 bg-[#003366F0] border-r z-10
+        className={`absolute top-0  left-0 h-full w-74 bg-[#003366F0] border-r z-20
           shadow-md transform transition-transform duration-300 
           ${isTemplateOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="h-full overflow-y-auto">
+        <div className="h-full overflow-y-auto pt-20">
           <h2 className="p-1 font-semibold text-lg text-white"></h2>
           <div className="p-3 text-white">
             {/* Show bars only if selected */}
             {selectedTemplate === "Template" && <Template_1 />}
             {selectedTemplate === "Element" && <Elements />}
-            {selectedTemplate === "Text" && <Text />}
+            {selectedTemplate === "Text" && (
+              <Text onFontSelect={(font: string) => {
+                // TODO: handle font selection here
+                console.log("Selected font:", font);
+              }} />
+            )}
             {selectedTemplate === "Upload" && <Upload />}
             {selectedTemplate === "Draw" && <Draw />}
             {selectedTemplate === "Projects" && <Projects />}
-            {/* Add more content here to see the scrollbar in action */}
           </div>
         </div>
       </div>

@@ -14,10 +14,10 @@ const Footer: React.FC = () => {
       let newProgress = ((clientX - rect.left) / rect.width) * 100;
 
       // Clamp progress between 10% and 500%
-      newProgress = Math.max(10, Math.min(newProgress, 500));
+      newProgress = Math.max(10, Math.min(newProgress, 100));
 
       setProgress(newProgress);
-      setZoomLevel(0.1 + (newProgress / 100) * 4.9); // Maps to 0.1x - 5x
+      setZoomLevel(0.1 + (newProgress / 100) * 4.9);
     };
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -36,6 +36,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-[#003366] py-4 px-2 mt-auto fixed bottom-0 right-0 w-full z-50">
+    {/*  <footer className="bg-gray-100 py-4 px-2 mt-auto fixed bottom-0 right-0 w-full"> */}
       <div className="flex items-center justify-end text-white gap-2 pr-6">
         <span>Page 1/1</span>
         <div

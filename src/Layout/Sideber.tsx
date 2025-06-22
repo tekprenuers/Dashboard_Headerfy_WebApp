@@ -28,12 +28,12 @@ const Sidebar: React.FC = () => {
 
   // Handle sidebar item click
   const handleClick = (sidebar: string) => {
-    setIsTemplateOpen(true); // Open drawer
-    setSelectedTemplate(sidebar); // Set selected template dynamically
+    setIsTemplateOpen(true);
+    setSelectedTemplate(sidebar); 
   };
 
   return (
-    <div className="h-screen px-5 bg-[#003366] text-white flex flex-col py-8 items-center z-20">
+    <div className="h-screen px-5 bg-[#003366] text-white flex flex-col py-8 items-center z-30">
       {/* Sidebar Items */}
       <div className="flex flex-col items-center gap-4">
         {/* Logo and Dropdown */}

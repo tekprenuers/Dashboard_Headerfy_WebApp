@@ -12,7 +12,7 @@ const TemplateDashboard: React.FC = () => {
 
   return (
     <>
-      <div className="relative flex flex-col items-center justify-center p-6">
+      <div className="relative flex flex-col items-center justify-center p-6 z-10">
         {/* Document Preview with Zoom */}
         <div
           className="max-h-[90vh] max-w-full overflow-auto z-20"
@@ -24,23 +24,25 @@ const TemplateDashboard: React.FC = () => {
         >
           <TemplatePreview />
           {/* Add Page Button */}
-          <button className="mt-4 flex items-center justify-center w-73 gap-2 bg-white border border-[#000000B0] px-4 py-1 rounded-md shadow hover:bg-gray-100 transition">
+          <button className="mt-4 flex items-center justify-center w-73 gap-2 bg-white border border-[#000000B0] px-4 py-1 rounded-md shadow hover:bg-gray-100 transition mb-5">
             <FiPlus className="text-gray-500" />
             Add page
           </button>
         </div>
 
         {/* AI Assistant Button */}
-        <div
-          onClick={() => setIsOpen(true)}
-          className="relative lg:ml-[45%] border-3 shadow-2xl p-3 w-40 rounded-3xl bg-[#003366] border-b-white text-white text-center cursor-pointer z-10"
-        >
-          Ai Assistant
-          <img
-            src={AiAssistant}
-            alt="Ai Assistant"
-            className="absolute -right-7"
-          />
+        <div className="mt-6 ml-[23%]">
+          <div
+            onClick={() => setIsOpen(true)}
+            className="relative lg:ml-[45%] border-3 shadow-2xl p-3 w-40 rounded-3xl bg-[#003366] border-b-white text-white text-center cursor-pointer z-10"
+          >
+            Ai Assistant
+            <img
+              src={AiAssistant}
+              alt="Ai Assistant"
+              className="absolute -right-7"
+            />
+          </div>
         </div>
 
         {/* AI Assistant Modal */}

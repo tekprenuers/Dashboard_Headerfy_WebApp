@@ -106,7 +106,7 @@ const MainLayout: React.FC = () => {
           <Header />
           <TemplateDrawer />
           {/* Page Content */}
-          <div className="flex-1  bg-gray-100 overflow-y-auto flex flex-col">
+          <div className="flex-1  bg-gray-100 lg:overflow-y-auto lg:overflow-x-auto flex flex-col">
             <Outlet />
             <div
               className={`flex-1 flex flex-col transition-all duration-300 ${
