@@ -7,9 +7,9 @@ const TemplatePreview:React.FC = () => {
     <div className="">
       <div className="flex justify-end text-[#00000099] mb-2">
         {/* <PlusSquare /> */}
-        <img src={Add} alt="" className=''/>
-        <CopyPlus className=''/>
-        <Trash2 className=''/>
+        <img src={Add} alt="" className='text-[#00000099]'/>
+        <CopyPlus className='text-[#00000099]'/>
+        <Trash2 className='text-[#00000099]'/>
       </div>
       {/* Document Preview */}
       <div className='h-90 bg-amber-800 w-73 rounded-lg text-center text-white'>template preview</div>

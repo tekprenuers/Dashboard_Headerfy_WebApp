@@ -44,8 +44,9 @@ const Sidebar: React.FC = () => {
 
         {/* Sidebar Links */}
         <div className="flex flex-col items-center gap-4 mt-6">
-        {sidebarItems.map((item) => (
+        {sidebarItems.map((item , i) => (
           <div
+            key={i}
             onClick={() => handleClick(item.name)}
             className="flex flex-col items-center cursor-pointer"
           >
