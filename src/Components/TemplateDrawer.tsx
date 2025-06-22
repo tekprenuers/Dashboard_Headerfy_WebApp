@@ -22,11 +22,11 @@ const TemplateDrawer: React.FC = () => {
         - overflow-y-auto makes the content scrollable 
       */}
       <div
-        className={`absolute top-0  left-0 h-full w-74 bg-[#003366F0] border-r z-20
+        className={`absolute top-[78px]  left-0 h-[82.5%] w-74 bg-[#003366F0] border-r z-20 
           shadow-md transform transition-transform duration-300 
           ${isTemplateOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
-        <div className="h-full overflow-y-auto pt-20">
+        <div className="h-full overflow-y-auto">
           <h2 className="p-1 font-semibold text-lg text-white"></h2>
           <div className="p-3 text-white">
             {/* Show bars only if selected */}
@@ -34,7 +34,6 @@ const TemplateDrawer: React.FC = () => {
             {selectedTemplate === "Element" && <Elements />}
             {selectedTemplate === "Text" && (
               <Text onFontSelect={(font: string) => {
-                // TODO: handle font selection here
                 console.log("Selected font:", font);
               }} />
             )}
@@ -55,7 +54,7 @@ const TemplateDrawer: React.FC = () => {
         onClick={() => {
           setIsTemplateOpen(!isTemplateOpen);
           if (isTemplateOpen) {
-            setSelectedTemplate(""); // Reset when closing
+            setSelectedTemplate("");
           }
         }}
         className={`

@@ -35,8 +35,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#003366] py-4 px-2 mt-auto fixed bottom-0 right-0 w-full z-50">
-    {/*  <footer className="bg-gray-100 py-4 px-2 mt-auto fixed bottom-0 right-0 w-full"> */}
+    <footer className="bg-[#003366] py-4 px-2 mt-auto fixed bottom-0 right-0 w-full">
       <div className="flex items-center justify-end text-white gap-2 pr-6">
         <span>Page 1/1</span>
         <div

@@ -18,7 +18,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-    <div className="flex items-center justify-between bg-[#003366] py-4 text-white z-30">
+    <div className="flex items-center justify-between bg-[#003366] py-4 text-white">
       {/* Left Side: Name & Controls */}
       <div className="flex items-center gap-1">
         <div className="flex items-center">

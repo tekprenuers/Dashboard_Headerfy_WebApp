@@ -40,7 +40,7 @@ const EnterBusinessDetails: React.FC<EnterBusinessDetailsProps> = ({ onClose }) 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
       <div className="w-[811px] bg-white rounded-[15px] p-6 relative">
         <button
           onClick={onClose}
