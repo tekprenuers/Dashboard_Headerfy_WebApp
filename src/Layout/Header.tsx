@@ -5,15 +5,21 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import { PiCrownLight, PiShareFatThin } from "react-icons/pi";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import BusinessDetailsModal from "../Components/BusinessDetailsModal/BusinessDetailsModal";
+import AccountSettings from "../Components/account-settings-billing-information/AccountSettings";
+// import { div } from "framer-motion/client";
 //import { div } from "framer-motion/client";
 
 const Header: React.FC = () => {
 
   const [showBusinessDetailsModal, setShowBusinessDetailsModal] = useState(false);
+  const [showAccountSettings, setShowAccountSettings] = useState(false)
  
  
   const toggleBusinessDetailsModal = () =>{
     setShowBusinessDetailsModal(!showBusinessDetailsModal);
+  }
+  const toggleAccountSettings = ()=>{
+    setShowAccountSettings(!showAccountSettings);
   }
 
   return (
@@ -61,7 +67,7 @@ const Header: React.FC = () => {
         <button className="border p-2 rounded-md transform scale-x-[-1] cursor-pointer" >
           <IoChatbubbleOutline size={20} className="" />
         </button>
-        <button className="px-3 flex py-2 bg-[#FF5733] gap-1 rounded-md text-white text-sm font-medium">
+        <button className="px-3 flex py-2 bg-[#FF5733] gap-1 rounded-md text-white text-sm font-medium cursor-pointer" onClick={toggleAccountSettings}>
           <PiShareFatThin size={20} />
           Share
         </button>
@@ -77,6 +83,13 @@ const Header: React.FC = () => {
           <BusinessDetailsModal onClose={toggleBusinessDetailsModal}/>
         </div>
       )}
+      {showAccountSettings && (
+        <div className="fixed inset-0  flex items-start justify-end top-30 right-20 z-50">
+          <AccountSettings onClose={toggleAccountSettings}/>
+        </div>
+
+        
+        )}
     </>
   );
   
