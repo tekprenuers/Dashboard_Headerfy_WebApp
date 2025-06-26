@@ -74,7 +74,7 @@ const Sidebar: React.FC = () => {
       </div>
     </div>
     {showMenu && 
-    <div className="fixed inset-0  flex items-start justify-end top-17 right-285 z-50">
+    <div className="fixed inset-0  flex items-start justify-end top-17 right-265 z-50">
        <MenuDropDown/>
     </div>
      
