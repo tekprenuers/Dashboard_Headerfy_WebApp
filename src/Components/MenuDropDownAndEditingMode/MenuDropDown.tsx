@@ -15,7 +15,7 @@ const MenuDropDown: React.FC = () => {
       setModalStyle({
         position: "fixed",
         top: rect.top + window.scrollY,
-        left: rect.left + rect.width + 10, // 10px right offset
+        left: rect.left + rect.width + 15,
         zIndex: 9999,
       });
       setShowVersion(true);
