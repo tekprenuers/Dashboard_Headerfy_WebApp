@@ -11,7 +11,7 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import Logo from "../assets/Image/Header_Logo.png";
 import { useTemplate } from "../Context/TemplateContext";
 import MenuDropDown from "../Components/MenuDropDownAndEditingMode/MenuDropDown";
-import { div } from "framer-motion/client";
+
 
 
 // Define the sidebar items in an array
@@ -74,9 +74,10 @@ const Sidebar: React.FC = () => {
       </div>
     </div>
     {showMenu && 
-    <div className="fixed inset-0  flex items-start justify-end top-17 right-265 z-50">
-       <MenuDropDown/>
-    </div>
+    <div className="fixed top-[75px] left-5 md:left-[100px] lg:left-[30px] z-50">
+  <MenuDropDown />
+</div>
+
      
       }
   </>);
