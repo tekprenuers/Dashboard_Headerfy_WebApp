@@ -5,7 +5,7 @@ import Template_2 from './Template_2';
 const Template:React.FC = () => {
   return (
     <>
-      <div className="mb-7">
+      <div className="ml-3">
         <Template_1 />
         <Template_2 />
       </div>

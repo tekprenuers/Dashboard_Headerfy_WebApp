@@ -28,9 +28,15 @@ const Sidebar: React.FC = () => {
 
   // Handle sidebar item click
   const handleClick = (sidebar: string) => {
-    setIsTemplateOpen(true);
-    setSelectedTemplate(sidebar); 
+    if (sidebar === "Draw") {
+      setIsTemplateOpen(false);
+      setSelectedTemplate("Draw");
+    } else {
+      setIsTemplateOpen(true);
+      setSelectedTemplate(sidebar);
+    }
   };
+  
 
   return (
     <div className="h-screen px-5 bg-[#003366] text-white flex flex-col py-8 items-center z-30">

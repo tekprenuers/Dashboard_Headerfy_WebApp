@@ -1,37 +1,4 @@
-// import React from "react";
-// import Sidebr from "./Sideber";
-// import Header from "./Header";
-// import { Outlet } from "react-router-dom";
-// import TemplateDrawer from "../Components/TemplateDrawer";
-// import Footer from "./Footer";
-
-// const MainLayout: React.FC = () => {
-//   return (
-//     <div className="flex h-screen overflow-hidden">
-//       {/* Sidebar */}
-//       <Sidebr />
-
-//       {/* Main Content Area */}
-//       <div className="flex flex-col flex-1">
-//         {/* Header */}
-//         <Header />
-
-//         {/* Page Content */}
-//         <div className="flex-1 relative bg-gray-100">
-//           <TemplateDrawer />
-//           <Footer />
-//           <Outlet />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MainLayout;
-
-
-
-// import React from "react";
+// import React, { useEffect, useState } from "react";
 // import Sidebr from "./Sideber";
 // import Header from "./Header";
 // import { Outlet } from "react-router-dom";
@@ -39,10 +6,22 @@
 // import Footer from "./Footer";
 // import { useTemplate } from "../Context/TemplateContext";
 // import { ZoomProvider } from "../Context/ZoomContext";
+// import DrawTool from "../Components/Draw/Draw-tool";
 
-// const MainLayout: React.FC = ({ children }: {children: React.ReactNode}) => {
-//   const { isTemplateOpen } = useTemplate(); // Get drawer state from context
+// const MainLayout: React.FC = () => {
+//   const { isTemplateOpen, selectedTemplate, setSelectedTemplate, setIsTemplateOpen } = useTemplate();
+//   const [showDrawTool, setShowDrawTool] = useState(false);
 
+//   useEffect(() => {
+//     if (selectedTemplate === "Draw") {
+//       setShowDrawTool(true);
+//       setIsTemplateOpen(false);
+//     } else {
+//       setShowDrawTool(false);
+//     }
+//   }, [selectedTemplate, setIsTemplateOpen]);
+  
+  
 //   return (
 //     <ZoomProvider>
 //       <div className="flex h-screen overflow-hidden">
@@ -50,25 +29,31 @@
 //         <Sidebr />
 
 //         {/* Main Content Area */}
-//         <div className="flex flex-col flex-1">
+//         <div className="flex relative flex-col flex-1">
 //           {/* Header */}
 //           <Header />
-
+//           <TemplateDrawer showButton={!showDrawTool} />
+//           {/* <TemplateDrawer /> */}
 //           {/* Page Content */}
-//           <div className="flex-1 relative bg-gray-100 flex flex-col min-h-0">
-//             {/* Template Drawer */}
-//             <TemplateDrawer />
+//           <div className="flex-1  bg-gray-100 lg:overflow-y-auto lg:overflow-x-auto flex flex-col">
 //             <Outlet />
-
-//             {/* Footer */}
-            // <div
-            //   className={`flex-1 flex flex-col transition-all duration-300 ${
-            //     isTemplateOpen ? "ml-[296px]" : "ml-0"
-            //   }`}
-            // >
-            //   <Footer />
-            // </div>
+//             <div
+//               className={`flex-1 flex flex-col transition-all duration-300 relative ${
+//                 isTemplateOpen ? "ml-[296px]" : "ml-0"
+//               }`}
+//             >
+//               {showDrawTool && "Draw" && (
+//                 <DrawTool
+//                   onClose={() => {
+//                     setShowDrawTool(false);
+//                     setSelectedTemplate("");
+//                   }}
+//                 />
+//               )}
+//               {/* <Footer /> */}
+//             </div>
 //           </div>
+//           <Footer />
 //         </div>
 //       </div>
 //     </ZoomProvider>
@@ -80,9 +65,7 @@
 
 
 
-
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebr from "./Sideber";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
@@ -90,9 +73,25 @@ import TemplateDrawer from "../Components/TemplateDrawer";
 import Footer from "./Footer";
 import { useTemplate } from "../Context/TemplateContext";
 import { ZoomProvider } from "../Context/ZoomContext";
+import DrawTool from "../Components/Draw/Draw-tool";
 
 const MainLayout: React.FC = () => {
-  const { isTemplateOpen } = useTemplate();
+  const {
+    isTemplateOpen,
+    selectedTemplate,
+    setSelectedTemplate,
+    setIsTemplateOpen,
+  } = useTemplate();
+  const [showDrawTool, setShowDrawTool] = useState(false);
+
+  useEffect(() => {
+    if (selectedTemplate === "Draw") {
+      setShowDrawTool(true);
+      setIsTemplateOpen(false);
+    } else {
+      setShowDrawTool(false);
+    }
+  }, [selectedTemplate, setIsTemplateOpen]);
 
   return (
     <ZoomProvider>
@@ -104,18 +103,31 @@ const MainLayout: React.FC = () => {
         <div className="flex relative flex-col flex-1">
           {/* Header */}
           <Header />
-          <TemplateDrawer />
-          {/* Page Content */}
-          <div className="flex-1  bg-gray-100 lg:overflow-y-auto lg:overflow-x-auto flex flex-col">
+          <TemplateDrawer showButton={!showDrawTool} />
+
+          {/* Page Content - with proper padding for footer */}
+          <div className="flex-1 bg-gray-100 lg:overflow-y-auto lg:overflow-x-auto flex flex-col pb-16">
             <Outlet />
             <div
-              className={`flex-1 flex flex-col transition-all duration-300 ${
+              className={`flex-1 transition-all duration-300 relative ${
                 isTemplateOpen ? "ml-[296px]" : "ml-0"
               }`}
             >
-              <Footer />
+              {/* <Outlet /> */}
+
+              {showDrawTool && "Draw" && (
+                <DrawTool
+                  onClose={() => {
+                    setShowDrawTool(false);
+                    setSelectedTemplate("");
+                  }}
+                />
+              )}
             </div>
           </div>
+
+          {/* Footer positioned properly */}
+          <Footer />
         </div>
       </div>
     </ZoomProvider>
