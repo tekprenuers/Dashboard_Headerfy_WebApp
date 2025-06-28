@@ -9,11 +9,11 @@ import MainLayout from "./Layout/MainLayout";
 import MainDashboard from "./Components/Dashboard/MainDashboard";
 
 
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<MainLayout />}>
       <Route path="/" element={<MainDashboard />} />
+      
      </Route>
   )
 );
