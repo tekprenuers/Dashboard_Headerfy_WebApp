@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdOutlineDashboard } from "react-icons/md";
 import {
   PiFileArrowUp,
@@ -10,6 +10,8 @@ import { CgFolder } from "react-icons/cg";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import Logo from "../assets/Image/Header_Logo.png";
 import { useTemplate } from "../Context/TemplateContext";
+import MenuDropDown from "../Components/MenuDropDownAndEditingMode/MenuDropDown";
+
 
 
 // Define the sidebar items in an array
@@ -25,22 +27,29 @@ const sidebarItems = [
 const Sidebar: React.FC = () => {
   const { setIsTemplateOpen, setSelectedTemplate, selectedTemplate } =
     useTemplate(); // Get drawer state
+    const [showMenu,setShowMenu] = useState(false);
 
   // Handle sidebar item click
   const handleClick = (sidebar: string) => {
     setIsTemplateOpen(true);
     setSelectedTemplate(sidebar); 
   };
+  const toggleMenu = () =>{
+        setShowMenu(!showMenu);
+  }
 
   return (
+    <>
     <div className="h-screen px-5 bg-[#003366] text-white flex flex-col py-8 items-center z-30">
       {/* Sidebar Items */}
       <div className="flex flex-col items-center gap-4">
         {/* Logo and Dropdown */}
-        <div className="flex items-center pl-4">
+        <div className="flex items-center pl-4 cursor-pointer" onClick={toggleMenu}>
           <img src={Logo} alt="logo" className="w-5 h-7" />
           <RiArrowDropDownLine size={24} className="cursor-pointer" />
         </div>
+     
+       
 
         {/* Sidebar Links */}
         <div className="flex flex-col items-center gap-4 mt-6">
@@ -64,7 +73,14 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
     </div>
-  );
+    {showMenu && 
+    <div className="fixed top-[75px] left-5 md:left-[100px] lg:left-[30px] z-50">
+  <MenuDropDown />
+</div>
+
+     
+      }
+  </>);
 };
 
 export default Sidebar;
