@@ -33,11 +33,44 @@ const EnterBusinessDetails: React.FC<EnterBusinessDetailsProps> = ({ onClose }) 
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    onClose();
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const form = new FormData();
+  form.append('fullName', formData.fullName);
+  form.append('companyName', formData.companyName);
+  form.append('phone', formData.phoneNumber);
+  form.append('address', formData.address);
+  form.append('websiteUrl', formData.websiteUrl);
+  form.append('companyEmail', formData.businessEmail);
+
+  if (formData.businessLogo) {
+    form.append('logo', formData.businessLogo);
+  }
+
+  try {
+    const response = await fetch('https://tekprenuers.com/api/business/create', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer {{authToken}}`
+      
+      },
+      body: form
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      console.log('Business created successfully:', result.message);
+      onClose(); 
+    } else {
+      console.error('Error:', result.message);
+    }
+  } catch (error) {
+    console.error('Network or server error:', error);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
