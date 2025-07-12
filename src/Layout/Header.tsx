@@ -7,7 +7,8 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import BusinessDetailsModal from "../Components/BusinessDetailsModal/BusinessDetailsModal";
 import AccountSettings from "../Components/account-settings-billing-information/AccountSettings";
 import BillingInformation from "../Components/account-settings-billing-information/BillingInformation";
-
+import AdminDashboard from "../Components/AdminDashboard/AdminDashboard";
+import { Link } from "react-router-dom";
 const Header: React.FC = () => {
   const [modalState, setModalState] = useState<'business' | 'account' | 'billing' | null>(null);
 
@@ -15,6 +16,7 @@ const Header: React.FC = () => {
   const openBusiness = () => setModalState('business');
   const openAccount = () => setModalState('account');
   const openBilling = () => setModalState('billing');
+  const [adminDashboard, setAdminDashboard] = useState(false);
 
   return (
     <>
@@ -52,10 +54,10 @@ const Header: React.FC = () => {
 
         {/* Right Side */}
         <div className="flex items-center gap-1 mr-5">
-          <div className="flex items-center">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-orange-500 text-white text-xl font-semibold">
+          <div className="flex items-center ">
+         <Link to="/adminDashboard"  > <button className="w-8 h-8 flex items-center justify-center rounded-full bg-orange-500 text-white text-xl font-semibold cursor-pointer">
               D
-            </button>
+            </button></Link>
             <RiArrowDropDownLine size={24} className="cursor-pointer" />
           </div>
           <button className="border p-2 rounded-md transform scale-x-[-1] cursor-pointer">
@@ -80,7 +82,7 @@ const Header: React.FC = () => {
 
       {/* Modals */}
       {modalState === 'business' && (
-        <div className="fixed inset-0 flex items-start justify-end z-50">
+        <div className="fixed inset-0 flex items-start justify-end z-50 top-[100px] right-[50px]">
           <BusinessDetailsModal onClose={closeModal} />
         </div>
       )}
