@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   const closeModal = () => setModalState(null);
   const openBusiness = () => setModalState('business');
   const openAccount = () => setModalState('account');
-  const openBilling = () => setModalState('billing');
+  // const openBilling = () => setModalState('billing');
 
   return (
     <>

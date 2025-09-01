@@ -1,13 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { TemplateProvider } from './Context/TemplateContext.tsx';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import App from "./App";
+import "./index.css";
+import { TemplateProvider } from "./Context/TemplateContext";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <TemplateProvider>
-      <App />
-    </TemplateProvider>
-  </StrictMode>
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <TemplateProvider>
+        <App />
+      </TemplateProvider>
+    </Provider>
+  </React.StrictMode>
 );

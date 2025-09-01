@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import React, { useRef, useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import TemplatePreview from "./TemplatePreview";
 import AiAssistant from "../../assets/Image/Skull.png";
@@ -10,42 +11,28 @@ import { useTemplate } from "../../Context/TemplateContext";
 import { FaPhone, FaTimes, FaWhatsapp } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import RichTextToolbar from "../../general/Rich-text/rich-text-toolbar";
-
-interface TextStyle {
-  bold?: boolean;
-  italic?: boolean;
-  underline?: boolean;
-  color?: string;
-  fontFamily?: string;
-  fontSize?: string;
-}
+import { UseTemplateSlice } from "../../Components/Templates/hook/use-template.hook";
 
 const TemplateDashboard: React.FC = () => {
   const { zoomLevel } = useZoom();
   const [isOpen, setIsOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const { isTemplateOpen } = useTemplate();
-  const [isSelected, setIsSelected] = useState(false);
-  const [selectedTextId, setSelectedTextId] = useState<string | null>(null);
-  const [activeFormats, setActiveFormats] = useState<Set<string>>(new Set());
   const dashboardRef = useRef<HTMLDivElement>(null);
   const toolbarRef = useRef<HTMLDivElement>(null);
-  const [currentBgColor, setCurrentBgColor] = useState<string>(() => {
-    const savedColor = localStorage.getItem("templateBgColor");
-    return savedColor || "";
-  });
-  const [textStyles, setTextStyles] = useState<Record<string, TextStyle>>(
-    () => {
-      const savedStyles = localStorage.getItem("textStyles");
-      return savedStyles ? JSON.parse(savedStyles) : {};
-    }
-  );
+  const [activeFormats, setActiveFormats] = useState<Set<string>>(new Set());
+  const [activeTemplateId, setActiveTemplateId] = useState<
+    "template_1" | "template_2" | null
+  >(null);
 
-  // Apply all saved styles when component mounts
+  const { templates, selectText, updateColors, updateTextStyles, setSelected } =
+    UseTemplateSlice();
+
+  // Apply saved styles when component mounts
   useEffect(() => {
-    Object.entries(textStyles).forEach(([id, styles]) => {
+    Object.entries(templates.template_1.textStyles).forEach(([id, styles]) => {
       const element = document.getElementById(id);
-      if (element) {
+      if (element && styles) {
         if (styles.bold) element.style.fontWeight = "bold";
         if (styles.italic) element.style.fontStyle = "italic";
         if (styles.underline) element.style.textDecoration = "underline";
@@ -54,16 +41,45 @@ const TemplateDashboard: React.FC = () => {
         if (styles.fontSize) element.style.fontSize = styles.fontSize;
       }
     });
-  }, []);
 
-  const handleBgColorChange = (color: string) => {
-    if (!color) return;
-    setCurrentBgColor(color);
-    localStorage.setItem("templateBgColor", color);
+    Object.entries(templates.template_2.textStyles).forEach(([id, styles]) => {
+      const element = document.getElementById(id);
+      if (element && styles) {
+        if (styles.bold) element.style.fontWeight = "bold";
+        if (styles.italic) element.style.fontStyle = "italic";
+        if (styles.underline) element.style.textDecoration = "underline";
+        if (styles.color) element.style.color = styles.color;
+        if (styles.fontFamily) element.style.fontFamily = styles.fontFamily;
+        if (styles.fontSize) element.style.fontSize = styles.fontSize;
+      }
+    });
+  }, [templates]);
+
+  const handleBgColorChange = (
+    color: string,
+    templateId: "template_1" | "template_2"
+  ) => {
+    if (!color || !templateId) return;
+
+    const template = templates[templateId];
+    const selectedId = template.selectedTextId;
+
+    if (selectedId === "template") {
+      updateColors(templateId, { bg: color });
+    } else if (selectedId === "sidebar") {
+      updateColors(templateId, { sidebar: color });
+    } else if (selectedId === "shape") {
+      updateColors(templateId, { shape: color });
+    }
   };
 
-  const handleTextSelect = (textId: string) => {
-    setSelectedTextId(textId);
+  const handleTextSelect = (
+    textId: string,
+    templateId: "template_1" | "template_2"
+  ) => {
+    setActiveTemplateId(templateId);
+    selectText(templateId, textId);
+
     const element = document.getElementById(textId);
     if (element) {
       const formats = new Set<string>();
@@ -81,6 +97,11 @@ const TemplateDashboard: React.FC = () => {
   };
 
   const handleCommand = (command: string, value?: string) => {
+    if (!activeTemplateId) return;
+
+    const template = templates[activeTemplateId];
+    const selectedTextId = template.selectedTextId;
+
     if (!selectedTextId) return;
 
     const element = document.getElementById(selectedTextId);
@@ -90,44 +111,61 @@ const TemplateDashboard: React.FC = () => {
       // Update active formats
       const newFormats = new Set(activeFormats);
       if (command === "bold") {
-        newFormats[element.style.fontWeight === "bold" ? "add" : "delete"](
-          "bold"
-        );
+        element.style.fontWeight === "bold"
+          ? newFormats.delete("bold")
+          : newFormats.add("bold");
       }
       if (command === "italic") {
-        newFormats[element.style.fontStyle === "italic" ? "add" : "delete"](
-          "italic"
-        );
+        element.style.fontStyle === "italic"
+          ? newFormats.delete("italic")
+          : newFormats.add("italic");
       }
       if (command === "underline") {
-        newFormats[
-          element.style.textDecoration.includes("underline") ? "add" : "delete"
-        ]("underline");
+        element.style.textDecoration.includes("underline")
+          ? newFormats.delete("underline")
+          : newFormats.add("underline");
       }
       setActiveFormats(newFormats);
 
-      // Update and save styles
-      setTextStyles((prev) => {
-        const updatedStyles = {
-          ...prev,
-          [selectedTextId]: {
-            ...prev[selectedTextId],
-            ...(command === "bold" && { bold: !prev[selectedTextId]?.bold }),
-            ...(command === "italic" && {
-              italic: !prev[selectedTextId]?.italic,
-            }),
-            ...(command === "underline" && {
-              underline: !prev[selectedTextId]?.underline,
-            }),
-            ...(command === "foreColor" && { color: value }),
-            ...(command === "fontName" && { fontFamily: value }),
-            ...(command === "fontSize" && { fontSize: value }),
-          },
-        };
-        localStorage.setItem("textStyles", JSON.stringify(updatedStyles));
-        return updatedStyles;
-      });
+      // Update styles in store
+      const updatedStyles = {
+        ...template.textStyles,
+        [selectedTextId]: {
+          ...template.textStyles[selectedTextId],
+          ...(command === "bold" && {
+            bold: element.style.fontWeight === "bold",
+          }),
+          ...(command === "italic" && {
+            italic: element.style.fontStyle === "italic",
+          }),
+          ...(command === "underline" && {
+            underline: element.style.textDecoration.includes("underline"),
+          }),
+          ...(command === "foreColor" && value && { color: value }),
+          ...(command === "fontName" && value && { fontFamily: value }),
+          ...(command === "fontSize" && value && { fontSize: value }),
+        },
+      };
+
+      updateTextStyles(activeTemplateId, updatedStyles);
     }
+  };
+
+  const getCurrentBgColorForToolbar = () => {
+    if (!activeTemplateId) return "#000000";
+    const template = templates[activeTemplateId];
+    const selectedId = template.selectedTextId;
+
+    if (selectedId === "template") return template.colors.bg;
+    if (selectedId === "sidebar") return template.colors.sidebar;
+    if (selectedId === "shape") return template.colors.shape;
+    return "#000000";
+  };
+
+  const handleTemplateSelect = (templateId: "template_1" | "template_2") => {
+    setActiveTemplateId(templateId);
+    setSelected(templateId, true);
+    selectText(templateId, "template");
   };
 
   return (
@@ -139,7 +177,7 @@ const TemplateDashboard: React.FC = () => {
         }`}
       >
         {/* Rich Text Toolbar */}
-        {selectedTextId && (
+        {activeTemplateId && (
           <div ref={toolbarRef} className="w-full max-w-4xl mb-4 z-30">
             <RichTextToolbar
               onCommand={handleCommand}
@@ -147,9 +185,14 @@ const TemplateDashboard: React.FC = () => {
               onFontChange={(font) => handleCommand("fontName", font)}
               onFontSizeChange={(size) => handleCommand("fontSize", size)}
               onColorChange={(color) => handleCommand("foreColor", color)}
-              onClose={() => setSelectedTextId(null)}
-              onBgColorChange={handleBgColorChange}
-              currentBgColor={currentBgColor}
+              onClose={() => {
+                setActiveTemplateId(null);
+                selectText(activeTemplateId, null);
+              }}
+              onBgColorChange={(color) =>
+                handleBgColorChange(color, activeTemplateId)
+              }
+              currentBgColor={getCurrentBgColorForToolbar()}
             />
           </div>
         )}
@@ -185,7 +228,6 @@ const TemplateDashboard: React.FC = () => {
 
         {/* Document Preview */}
         <div
-          onClick={() => setIsSelected(!isSelected)}
           className="max-h-[90vh] max-w-full z-20 mb-6"
           style={{
             transform: `scale(${zoomLevel})`,
@@ -194,27 +236,34 @@ const TemplateDashboard: React.FC = () => {
           }}
         >
           <TemplatePreview
-            currentBgColor={currentBgColor}
-            onBgColorChange={handleBgColorChange}
-            onTextSelect={handleTextSelect}
-            selectedTextId={selectedTextId}
-            // onTextSelect={(id) => {
-            //   console.log("TemplateDashboard - onTextSelect called with:", id);
-            //   handleTextSelect(id);
-            // }}
+            template1State={templates.template_1}
+            onTemplate1TextSelect={(textId) =>
+              handleTextSelect(textId, "template_1")
+            }
+            onTemplate1BgColorChange={(color) =>
+              handleBgColorChange(color, "template_1")
+            }
+            onTemplate1Select={() => handleTemplateSelect("template_1")}
+            template2State={templates.template_2}
+            onTemplate2TextSelect={(textId) =>
+              handleTextSelect(textId, "template_2")
+            }
+            onTemplate2BgColorChange={(color) =>
+              handleBgColorChange(color, "template_2")
+            }
+            onTemplate2Select={() => handleTemplateSelect("template_2")}
           />
-          {/* Add Page Button */}
+
           <button className="mt-4 flex items-center justify-center w-[335px] gap-2 bg-white border border-[#000000B0] px-4 py-1 rounded-md shadow hover:bg-gray-100 transition mb-5 cursor-pointer">
             <FiPlus className="text-gray-500" />
             Add page
           </button>
         </div>
-
-        {/* AI Assistant Button */}
         <div className="mt-6 ml-[23%] z-10 mb-20">
           <div
             onClick={() => setIsOpen(true)}
             className="relative lg:ml-[45%] border-3 shadow-2xl p-3 w-40 rounded-3xl bg-[#003366] border-b-white text-white text-center cursor-pointer"
+            style={{ backgroundColor: "#003366" }}
           >
             Ai Assistant
             <img
@@ -225,7 +274,7 @@ const TemplateDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* ++++++++++++++++++++++++++ AI Assistant Modal +++++++++++++++++++++++++ */}
+        {/* AI Assistant Modal */}
         {isOpen && (
           <>
             <div

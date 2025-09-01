@@ -63,6 +63,7 @@ export default function RichTextToolbar({
   const [fontFamily, setFontFamily] = useState(currentFont);
 
   const fonts = [
+    // Standard fonts
     "Helvetica World",
     "Arial",
     "Times New Roman",
@@ -73,6 +74,45 @@ export default function RichTextToolbar({
     "Inter",
     "Roboto",
     "Open Sans",
+
+    // Signature/handwriting style fonts
+    "Brush Script MT",
+    "Lucida Handwriting",
+    "Bradley Hand",
+    "Segoe Script",
+    "Monotype Corsiva",
+    "Apple Chancery",
+    "French Script MT",
+    "Edwardian Script ITC",
+    "Mistral",
+    "Vivaldi",
+    "Rage Italic",
+    "Freestyle Script",
+    "Script MT Bold",
+    "Kunstler Script",
+    "Blackadder ITC",
+    "Pristina",
+    "Viner Hand ITC",
+    "Segoe Print",
+    "MV Boli",
+    "Ink Free",
+
+    // Modern calligraphy/handwriting fonts
+    "Allura",
+    "Alex Brush",
+    "Great Vibes",
+    "Dancing Script",
+    "Pacifico",
+    "Lobster",
+    "Satisfy",
+    "Cookie",
+    "Tangerine",
+    "Sacramento",
+    "Parisienne",
+    "La Belle Aurore",
+    "Mr Dafoe",
+    "Mrs Saint Delafield",
+    "Petit Formal Script",
   ];
   const backgroundColors = [
     "#FFFFFF",

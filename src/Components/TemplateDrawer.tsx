@@ -23,7 +23,7 @@ const TemplateDrawer: React.FC<TemplateDrawerProps> = ({
   return (
     <div className="">
       <div
-        className={`absolute md:top-[89px] left-0 md:h-[82%] lg:top-[89px] lg:h-[82%] xl:top-[77px] xl:h-[83.6%] 2xl:h-[81.8%] 3xl:h-[93.2%] w-83 bg-[#003366F0] border-r z-20 
+        className={`absolute md:top-[89px] left-0 md:h-[82%] lg:top-[89px] lg:h-[82%] xl:top-[77px] xl:h-[86.9%] 2xl:h-[88.8%] 3xl:h-[93.2%] w-83 bg-[#003366F0] border-r z-20 
           shadow-md transform transition-transform duration-300 
           ${isTemplateOpen ? "translate-x-0" : "-translate-x-full"}`}
       >

@@ -1,53 +1,33 @@
 import type React from "react";
 import { useState } from "react";
-import { editableTexts } from "../../Components/Templates/editable-text";
+import { InteriorDesignTemplate } from "../../Components/Templates/editable-text";
 
 interface Template1Props {
+  onSidebarColorChange?: (color: string) => void;
+  onShapeColorChange?: (color: string) => void;
   onBgColorChange?: (color: string) => void;
-  isSelected?: boolean;
-  onTextSelect?: (textId: string | "template") => void;
+  onTemplateSelect?: () => void;
+  onTextSelect?: (textId: string | "template" | "sidebar" | "shape") => void;
   selectedTextId?: string | null;
   currentBgColor?: string;
-  onTemplateSelect?: () => void;
+  currentSidebarColor?: string;
+  currentShapeColor?: string;
+  isSelected?: boolean;
 }
 
-
 const Template_1: React.FC<Template1Props> = ({
-  onBgColorChange,
-  isSelected = false,
   onTextSelect,
+  onTemplateSelect,
+  isSelected = false,
   selectedTextId,
   currentBgColor = "#e5e7eb",
-  onTemplateSelect,
-}) => {   
-  const [bgColor, setBgColor] = useState("#e5e7eb");
-  const handleBgColorChange = (color: string) => {
-    setBgColor(color);
-    onBgColorChange?.(color);
-  };
-
-  const handleTemplateClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    // Check if we clicked on a text element
-    const target = e.target as HTMLElement;
-    const isTextElement =
-      target.contentEditable === "true" ||
-      target.closest('[contenteditable="true"]');
-
-    if (!isTextElement) {
-      console.log("Template_1 - Calling onTemplateSelect");
-      onTemplateSelect?.(); // NEW: Use this instead
-    }
-
-    // Only change bg color if clicking directly on template (not text elements)
-    if (e.target === e.currentTarget) {
-      onBgColorChange?.(currentBgColor);
-    }
-  };
-
+  currentSidebarColor = "#1e293b",
+  currentShapeColor = "#e5e7eb",
+}) => {
   const [textContents, setTextContents] = useState<Record<string, string>>(
-    Object.fromEntries(editableTexts.map((text) => [text.id, text.defaultText]))
+    Object.fromEntries(
+      InteriorDesignTemplate.map((text) => [text.id, text.defaultText])
+    )
   );
 
   const handleTextClick = (e: React.MouseEvent, id: string) => {
@@ -57,7 +37,6 @@ const Template_1: React.FC<Template1Props> = ({
     if (element) {
       element.focus();
     }
-    onTextSelect?.(id);
   };
 
   const handleBlur = (id: string, e: React.FocusEvent<HTMLDivElement>) => {
@@ -77,7 +56,10 @@ const Template_1: React.FC<Template1Props> = ({
 
   return (
     <div
-      onClick={handleTemplateClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onTemplateSelect?.();
+      }}
       style={{ backgroundColor: currentBgColor || "#e5e7eb" }}
       className={`w-[335px] h-[394.821px] overflow-hidden relative ${
         isSelected ? "ring-2 ring-blue-400" : ""
@@ -85,26 +67,43 @@ const Template_1: React.FC<Template1Props> = ({
     >
       <div className="flex w-full h-full">
         {/* Left Sidebar */}
-        <div className="w-[64px] bg-slate-700 flex flex-col items-center relative">
+        <div
+          className={`w-[64px] flex flex-col items-center relative ${
+            selectedTextId === "sidebar" ? "ring-2 ring-blue-400" : ""
+          }`}
+          style={{ backgroundColor: currentSidebarColor}}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTextSelect?.("sidebar");
+          }}
+        >
           {/* Diamond Shape */}
           <div
             style={{
-              backgroundColor: currentBgColor || "#e5e7eb",
-              borderColor: currentBgColor || "#e5e7eb",
+              backgroundColor: currentShapeColor || "#e5e7eb",
+              borderColor: currentShapeColor || "#e5e7eb",
             }}
-            className="absolute top-10 left-16 transform -translate-x-1/2 rotate-45 w-10 h-10 border-2 z-10 flex items-center justify-center"
+            className={`absolute top-10 left-16 transform -translate-x-1/2 rotate-45 w-10 h-10 border-2 z-10 flex items-center justify-center ${
+              selectedTextId === "shape" ? "ring-2 ring-blue-400" : ""
+            }`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onTextSelect?.("shape");
+            }}
           >
             <div className="w-6 h-6 border-2 border-slate-700 transform rotate-90"></div>
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Main Content - Right Sidebar */}
         <div
-          onClick={() => handleBgColorChange("")}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTextSelect?.("template");
+          }}
           style={{ backgroundColor: currentBgColor }}
           className="flex-1 px-6 py-4 overflow-hidden"
         >
-          {/* Header */}
           <div className="mb-2">
             <h1
               id="header-title"
@@ -252,7 +251,7 @@ const Template_1: React.FC<Template1Props> = ({
                 "text-base font-script text-slate-800 outline-none",
                 "signature"
               )}
-              style={{ fontFamily: "cursive" }}
+              style={{ fontFamily: "Brush Script MT" }}
               onClick={(e) => handleTextClick(e, "signature")}
               onBlur={(e) => handleBlur("signature", e)}
               contentEditable
