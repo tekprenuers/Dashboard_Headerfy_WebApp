@@ -18,18 +18,18 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between bg-[#003366] py-4 text-white">
+      <div className="flex items-center justify-between gap-2 bg-[#003366] py-4 px-4 text-white min-w-0">
         {/* Left Side */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 flex-shrink-0">
           <div className="flex items-center">
             <span className="text-sm">Name</span>
             <button className="opacity-80 hover:opacity-100">
               <RiArrowDropDownLine size={24} className="cursor-pointer" />
             </button>
           </div>
-          <span className="text-gray-400">|</span>
-          <button className="text-sm opacity-80 hover:opacity-100">Resize</button>
-          <span className="text-gray-400">|</span>
+          <span className="text-gray-400 hidden sm:inline">|</span>
+          <button className="text-sm opacity-80 hover:opacity-100 hidden sm:block">Resize</button>
+          <span className="text-gray-400 hidden sm:inline">|</span>
           <div className="items-center flex gap-2">
             <button className="text-xs opacity-80 hover:opacity-100">
               <HiMiniArrowUturnLeft size={20} className="text-gray-400" />
@@ -41,17 +41,17 @@ const Header: React.FC = () => {
         </div>
 
         {/* Search */}
-        <div className="flex items-center border border-gray-100 px-3 py-3 rounded-md w-150">
-          <FiSearch className="text-white" />
+        <div className="flex items-center border border-gray-100 px-3 py-3 rounded-md flex-1 min-w-0 max-w-md">
+          <FiSearch className="text-white flex-shrink-0" />
           <input
             type="text"
             placeholder="Letterhead template"
-            className="ml-2 text-sm w-full outline-none bg-transparent"
+            className="ml-2 text-sm w-full outline-none bg-transparent min-w-0"
           />
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-1 mr-5">
+        <div className="flex items-center gap-1 flex-shrink-0">
           <div className="flex items-center">
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-orange-500 text-white text-xl font-semibold">
               D

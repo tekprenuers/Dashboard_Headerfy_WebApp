@@ -1,449 +1,282 @@
-import React, {useState} from 'react'
-import { BiSearchAlt } from 'react-icons/bi';
-import { FaArrowLeft } from 'react-icons/fa';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addShape, ShapeType } from "../Templates/slice/template.slice";
+import { RootState } from "../../redux/store";
 
-const elements: Record<
-  "shapes" | "lines" | "icons",
-  { name: string; svg: React.ReactNode }[]
-> = {
-  shapes: [
-    {
-      name: "Square",
-      svg: (
-        <svg width="40" height="40">
-          <rect width="40" height="40" fill="" />
-        </svg>
-      ),
-    },
-    {
-      name: "Circle",
-      svg: (
-        <svg width="40" height="40">
-          <circle cx="20" cy="20" r="20" fill="" />
-        </svg>
-      ),
-    },
-    {
-      name: "Triangle",
-      svg: (
-        <svg width="40" height="40">
-          <polygon points="20,0 40,40 0,40" fill="" />
-        </svg>
-      ),
-    },
-    {
-      name: "Star",
-      svg: (
+interface ShapeItem {
+  name: string;
+  type: ShapeType;
+  preview: React.ReactNode;
+}
+
+const shapeItems: ShapeItem[] = [
+  {
+    name: "Square",
+    type: "square",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
+        <rect x="5" y="5" width="90" height="90" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Circle",
+    type: "circle",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
+        <circle cx="50" cy="50" r="45" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Triangle",
+    type: "triangle",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
+        <polygon points="50,5 95,95 5,95" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Star",
+    type: "star",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
         <polygon
-          points="50,10 60,40 90,40 65,60 75,90 50,70 25,90 35,60 10,40 40,40"
-          fill=""
+          points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"
+          fill="currentColor"
         />
-      ),
-    },
-    {
-      name: "Heart",
-      svg: (
+      </svg>
+    ),
+  },
+  {
+    name: "Heart",
+    type: "heart",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
         <path
-          d="M10,30 A10,10 0 0,1 30,30 A10,10 0 0,1 50,30 Q50,50 30,70 Q10,50 10,30 Z"
-          fill="red"
+          d="M10,35 A22,22,0,0,1,50,35 A22,22,0,0,1,90,35 Q90,60,50,90 Q10,60,10,35 Z"
+          fill="currentColor"
         />
-      ),
-    },
-    {
-      name: "Diamond",
-      svg: <polygon points="25,0 50,25 25,50 0,25" fill="" />,
-    },
-    {
-      name: "Cloud",
-      svg: (
+      </svg>
+    ),
+  },
+  {
+    name: "Diamond",
+    type: "diamond",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
+        <polygon points="50,5 95,50 50,95 5,50" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Cloud",
+    type: "cloud",
+    preview: (
+      <svg viewBox="0 0 100 70" width="36" height="26">
         <path
-          d="M20,10 A10,10 0 0,1 40,10 A10,10 0 0,1 60,10 Q60,30 30,30 Q0,30 0,10 A10,10 0 0,1 20,10 Z"
-          fill=""
+          d="M20,60 A18,18,0,0,1,20,25 A18,18,0,0,1,45,10 A20,20,0,0,1,82,20 A18,18,0,0,1,82,55 Z"
+          fill="currentColor"
         />
-      ),
-    },
-    {
-      name: "Ellipse",
-      svg: <ellipse cx="25" cy="15" rx="20" ry="10" fill="" />,
-    },
-    {
-      name: "Pentagon",
-      svg: <polygon points="25,0 50,20 40,50 10,50 0,20" fill="" />,
-    },
-    {
-      name: "Hexagon",
-      svg: <polygon points="10,20 30,0 50,20 50,40 30,60 10,40" fill="" />,
-    },
-    {
-      name: "Octagon",
-      svg: (
+      </svg>
+    ),
+  },
+  {
+    name: "Ellipse",
+    type: "ellipse",
+    preview: (
+      <svg viewBox="0 0 100 60" width="36" height="22">
+        <ellipse cx="50" cy="30" rx="48" ry="27" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Pentagon",
+    type: "pentagon",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
+        <polygon points="50,5 95,36 76,90 24,90 5,36" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Hexagon",
+    type: "hexagon",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
+        <polygon points="50,5 93,28 93,72 50,95 7,72 7,28" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Octagon",
+    type: "octagon",
+    preview: (
+      <svg viewBox="0 0 100 100" width="36" height="36">
         <polygon
-          points="10,20 20,10 40,10 50,20 50,40 40,50 20,50 10,40"
-          fill=""
+          points="30,5 70,5 95,30 95,70 70,95 30,95 5,70 5,30"
+          fill="currentColor"
         />
-      ),
-    },
-  ],
-  lines: [
-    {
-      name: "Arrow Right",
-      svg: (
-        <svg width="40" height="20">
-          <line x1="0" y1="10" x2="40" y2="10" stroke="black" strokeWidth="3" />
-        </svg>
-      ),
-    },
-    {
-      name: "Arrow Left",
-      svg: (
-        <svg width="40" height="20">
-          <line x1="40" y1="10" x2="0" y2="10" stroke="black" strokeWidth="3" />
-        </svg>
-      ),
-    },
-    {
-      name: "Straight Line",
-      svg: (
-        <line x1="0" y1="10" x2="40" y2="10" stroke="black" strokeWidth="3" />
-      ),
-    },
-    {
-      name: "Arrow Right",
-      svg: (
-        <line
-          x1="0"
-          y1="10"
-          x2="40"
-          y2="10"
-          stroke="black"
-          strokeWidth="3"
-          markerEnd="url(#arrowhead)"
-        />
-      ),
-    },
-    {
-      name: "Arrow Left",
-      svg: (
-        <line
-          x1="40"
-          y1="10"
-          x2="0"
-          y2="10"
-          stroke="black"
-          strokeWidth="3"
-          markerEnd="url(#arrowhead)"
-        />
-      ),
-    },
-    {
-      name: "Zigzag Line",
-      svg: (
+      </svg>
+    ),
+  },
+];
+
+interface LineItem {
+  name: string;
+  type: ShapeType;
+  preview: React.ReactNode;
+}
+
+const lineItems: LineItem[] = [
+  {
+    name: "Line",
+    type: "line",
+    preview: (
+      <svg viewBox="0 0 80 20" width="56" height="14">
+        <line x1="2" y1="10" x2="78" y2="10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    name: "Arrow →",
+    type: "arrow-right",
+    preview: (
+      <svg viewBox="0 0 80 20" width="56" height="14">
+        <line x1="2" y1="10" x2="64" y2="10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <polygon points="64,4 78,10 64,16" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Arrow ←",
+    type: "arrow-left",
+    preview: (
+      <svg viewBox="0 0 80 20" width="56" height="14">
+        <line x1="16" y1="10" x2="78" y2="10" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+        <polygon points="16,4 2,10 16,16" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Zigzag",
+    type: "zigzag",
+    preview: (
+      <svg viewBox="0 0 80 24" width="56" height="17">
         <polyline
-          points="0,10 10,20 20,10 30,20 40,10"
-          stroke="black"
-          strokeWidth="3"
+          points="2,18 16,6 30,18 44,6 58,18 72,6"
+          stroke="currentColor"
+          strokeWidth="4"
           fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-      ),
-    },
-  ],
-  icons: [
-    {
-      name: "Pencil",
-      svg: (
-        <svg width="40" height="40">
-          <path d="M10 10 L30 30" stroke="black" strokeWidth="3" />
-        </svg>
-      ),
-    },
-  ],
-};
+      </svg>
+    ),
+  },
+];
+
+type Category = "shapes" | "lines";
 
 const Elements: React.FC = () => {
-   const [selectedElements, setSelectedElements] = useState<string[]>([]);
-   const [activeCategory, setActiveCategory] = useState<
-     keyof typeof elements | null
-   >(null);
+  const dispatch = useDispatch();
+  const templates = useSelector((state: RootState) => state.templates);
+  const [activeCategory, setActiveCategory] = useState<Category>("shapes");
 
-   const addElement = (element: string) => {
-     setSelectedElements([...selectedElements, element]);
-   };
+  const handleAddShape = (type: ShapeType) => {
+    const targetId = templates.activeTemplateId;
+    if (!targetId || !templates[targetId]?.isCreated) {
+      alert("Please select a template first.");
+      return;
+    }
+
+    dispatch(
+      addShape({
+        templateId: targetId,
+        shape: {
+          id: crypto.randomUUID(),
+          type,
+          x: 60,
+          y: 60,
+          width: 80,
+          height: 80,
+          color: "#3b82f6",
+          zIndex: Date.now(),
+        },
+      })
+    );
+  };
+
   return (
     <div className="text-white">
-      {activeCategory ? (
-        <div>
-          <button
-            onClick={() => setActiveCategory(null)}
-            className="mb-2 text-white"
-          >
-            <div className="flex items-center gap-2">
-              {" "}
-              <FaArrowLeft size={15} /> <span>Back</span>
-            </div>
-          </button>
-          <div className="relative">
-            <BiSearchAlt
-              size={20}
-              className="absolute top-1/2 left-4 -translate-y-1/2 text-white"
-            />
-            <input
-              type="text"
-              placeholder="Search for fonts"
-              className="w-full p-2 rounded-md indent-8 border border-white outline-none"
-            />
-          </div>
-          <h3 className="font-semibold capitalize mb-2 mt-5">{activeCategory}</h3>
-          <div className="flex flex-wrap gap-7">
-            {elements[activeCategory].map((item) => (
-              <div
-                key={item.name}
-                onClick={() => addElement(item.name)}
-                className="p-2 cursor-pointer"
-              >
-                {item.svg}
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div className="relative">
-            <BiSearchAlt
-              size={20}
-              className="absolute top-1/2 left-4 -translate-y-1/2 text-white"
-            />
-            <input
-              type="text"
-              placeholder="Search for fonts"
-              className="w-full p-2 rounded-md indent-8 border border-white outline-none"
-            />
-          </div>
-          {Object.entries(elements).map(([category, items]) => (
-            <div key={category} className="mt-4">
-              <div className="flex justify-between items-center">
-                <h3 className="font-medium capitalize">
-                  {category.replace("_", " & ")}
-                </h3>
-                <button
-                  onClick={() =>
-                    setActiveCategory(category as keyof typeof elements)
-                  }
-                >
-                  see all
-                </button>
-              </div>
-              <div className="flex gap-2 overflow-x-auto">
-                {items.slice(0, 3).map((item) => (
-                  <div
-                    key={item.name}
-                    onClick={() => addElement(item.name)}
-                    className="p-2 cursor-pointer"
-                  >
-                    {item.svg}
-                  </div>
-                ))}
-              </div>
-            </div>
+      {/* Category Tabs */}
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={() => setActiveCategory("shapes")}
+          className={`flex-1 py-1.5 rounded text-sm font-medium transition-colors cursor-pointer ${
+            activeCategory === "shapes"
+              ? "bg-[#FF5733] text-white"
+              : "bg-white/10 hover:bg-white/20"
+          }`}
+        >
+          Shapes
+        </button>
+        <button
+          onClick={() => setActiveCategory("lines")}
+          className={`flex-1 py-1.5 rounded text-sm font-medium transition-colors cursor-pointer ${
+            activeCategory === "lines"
+              ? "bg-[#FF5733] text-white"
+              : "bg-white/10 hover:bg-white/20"
+          }`}
+        >
+          Lines
+        </button>
+      </div>
+
+      {/* Shapes Grid */}
+      {activeCategory === "shapes" && (
+        <div className="grid grid-cols-3 gap-3">
+          {shapeItems.map((item) => (
+            <button
+              key={item.type}
+              onClick={() => handleAddShape(item.type)}
+              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer group"
+              title={item.name}
+            >
+              <span className="text-white group-hover:text-blue-300 transition-colors">
+                {item.preview}
+              </span>
+              <span className="text-[10px] text-white/70">{item.name}</span>
+            </button>
           ))}
         </div>
       )}
+
+      {/* Lines Grid */}
+      {activeCategory === "lines" && (
+        <div className="flex flex-col gap-3">
+          {lineItems.map((item) => (
+            <button
+              key={item.type}
+              onClick={() => handleAddShape(item.type)}
+              className="flex items-center gap-3 p-3 rounded-lg bg-white/10 hover:bg-white/20 transition-colors cursor-pointer group"
+              title={item.name}
+            >
+              <span className="text-white group-hover:text-blue-300 transition-colors">
+                {item.preview}
+              </span>
+              <span className="text-sm text-white/70">{item.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <p className="text-white/40 text-[11px] text-center mt-4">
+        Click any shape to add it to your active template
+      </p>
     </div>
   );
-}
+};
 
-export default Elements
-
-
-
-
-
-// import React, { useState } from "react";
-// import { BiSearchAlt } from "react-icons/bi";
-// import { FaArrowLeft } from "react-icons/fa";
-
-// const elements: Record<
-//   "shapes" | "lines" | "icons",
-//   { name: string; svg: React.ReactNode }[]
-// > = {
-//   shapes: [
-//     {
-//       name: "Square",
-//       svg: (
-//         <svg width="40" height="40">
-//           <rect width="40" height="40" fill="blue" />
-//         </svg>
-//       ),
-//     },
-//     {
-//       name: "Circle",
-//       svg: (
-//         <svg width="40" height="40">
-//           <circle cx="20" cy="20" r="20" fill="red" />
-//         </svg>
-//       ),
-//     },
-//     {
-//       name: "Triangle",
-//       svg: (
-//         <svg width="40" height="40">
-//           <polygon points="20,0 40,40 0,40" fill="green" />
-//         </svg>
-//       ),
-//     },
-//     {
-//       name: "Star",
-//       svg: (
-//         <svg width="40" height="40">
-//           <polygon
-//             points="20,0 25,15 40,15 28,25 32,40 20,30 8,40 12,25 0,15 15,15"
-//             fill="yellow"
-//           />
-//         </svg>
-//       ),
-//     },
-//     {
-//       name: "Heart",
-//       svg: (
-//         <svg width="40" height="40">
-//           <path
-//             d="M10,30 A10,10 0 0,1 30,30 A10,10 0 0,1 50,30 Q50,50 30,70 Q10,50 10,30 Z"
-//             fill="red"
-//           />
-//         </svg>
-//       ),
-//     },
-//   ],
-//   lines: [
-//     {
-//       name: "Arrow Right",
-//       svg: (
-//         <svg width="40" height="20">
-//           <line x1="0" y1="10" x2="40" y2="10" stroke="black" strokeWidth="3" />
-//         </svg>
-//       ),
-//     },
-//     {
-//       name: "Arrow Left",
-//       svg: (
-//         <svg width="40" height="20">
-//           <line x1="40" y1="10" x2="0" y2="10" stroke="black" strokeWidth="3" />
-//         </svg>
-//       ),
-//     },
-//     {
-//       name: "Straight Line",
-//       svg: (
-//         <svg width="40" height="20">
-//           <line x1="0" y1="10" x2="40" y2="10" stroke="black" strokeWidth="3" />
-//         </svg>
-//       ),
-//     },
-//   ],
-//   icons: [
-//     {
-//       name: "Pencil",
-//       svg: (
-//         <svg width="40" height="40">
-//           <path d="M10 10 L30 30" stroke="black" strokeWidth="3" />
-//         </svg>
-//       ),
-//     },
-//   ],
-// };
-
-// const Elements: React.FC = () => {
-//   const [selectedElements, setSelectedElements] = useState<string[]>([]);
-//   const [activeCategory, setActiveCategory] = useState<
-//     keyof typeof elements | null
-//   >(null);
-
-//   const addElement = (element: string) => {
-//     setSelectedElements((prev) => [...prev, element]);
-//   };
-
-//   return (
-//     <div className="text-white">
-//       {activeCategory ? (
-//         <div>
-//           <button
-//             onClick={() => setActiveCategory(null)}
-//             className="mb-2 text-white"
-//           >
-//             <div className="flex items-center gap-2">
-//               <FaArrowLeft size={15} /> <span>Back</span>
-//             </div>
-//           </button>
-//           <div className="relative">
-//             <BiSearchAlt
-//               size={20}
-//               className="absolute top-1/2 left-4 -translate-y-1/2 text-white"
-//             />
-//             <input
-//               type="text"
-//               placeholder="Search for fonts"
-//               className="w-full p-2 rounded-md indent-8 border border-white outline-none"
-//             />
-//           </div>
-//           <h3 className="font-semibold capitalize mb-2 mt-5">
-//             {activeCategory}
-//           </h3>
-//           <div className="flex flex-wrap gap-7">
-//             {elements[activeCategory].map((item) => (
-//               <div
-//                 key={item.name}
-//                 onClick={() => addElement(item.name)}
-//                 className="p-2 cursor-pointer"
-//               >
-//                 {item.svg}
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       ) : (
-//         <div>
-//           <div className="relative">
-//             <BiSearchAlt
-//               size={20}
-//               className="absolute top-1/2 left-4 -translate-y-1/2 text-white"
-//             />
-//             <input
-//               type="text"
-//               placeholder="Search for fonts"
-//               className="w-full p-2 rounded-md indent-8 border border-white outline-none"
-//             />
-//           </div>
-//           {Object.entries(elements).map(([category, items]) => (
-//             <div key={category} className="mt-4">
-//               <div className="flex justify-between items-center">
-//                 <h3 className="font-bold capitalize">
-//                   {category.replace("_", " & ")}
-//                 </h3>
-//                 <button
-//                   onClick={() =>
-//                     setActiveCategory(category as keyof typeof elements)
-//                   }
-//                 >
-//                   See All
-//                 </button>
-//               </div>
-//               <div className="flex gap-2 overflow-x-auto">
-//                 {items.slice(0, 3).map((item) => (
-//                   <div
-//                     key={item.name}
-//                     onClick={() => addElement(item.name)}
-//                     className="p-2 cursor-pointer"
-//                   >
-//                     {item.svg}
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Elements;
-
+export default Elements;

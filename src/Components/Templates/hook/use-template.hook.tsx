@@ -10,6 +10,8 @@ import {
   setTemplateSelected,
   saveTemplateState,
   TextStyle,
+  deleteTemplate,
+  addTemplate,
 } from "../slice/template.slice";
 
 export const UseTemplateSlice = () => {
@@ -65,6 +67,22 @@ export const UseTemplateSlice = () => {
     [dispatch]
   );
 
+  const handleDeleteTemplate = useCallback(
+    (templateId: "template_1" | "template_2") => {
+      dispatch(deleteTemplate({ templateId }));
+    },
+    [dispatch]
+  );
+
+  const handleAddTemplate = useCallback(
+    (templateId: "template_1" | "template_2") => {
+      dispatch(addTemplate({ templateId }));
+    },
+    [dispatch]
+  );
+
+  
+
   return {
     templates,
     selectText,
@@ -73,5 +91,7 @@ export const UseTemplateSlice = () => {
     updateTextContent,
     setSelected,
     saveState,
+    handleDeleteTemplate,
+    handleAddTemplate,
   };
 };

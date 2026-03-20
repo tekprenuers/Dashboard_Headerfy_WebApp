@@ -156,11 +156,11 @@ const Projects: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const templates = [
     {
-      component: <Template_1 />,
+      component: <Template_1 isReadOnly templateId="template_1" />,
       title: "Interior Design - Letterhead",
     },
     {
-      component: <Template_2 />,
+      component: <Template_2 isReadOnly templateId="template_2" />,
       title: "Hospital - Letterhead",
     },
     // Add more templates here as needed

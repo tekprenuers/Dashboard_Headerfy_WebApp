@@ -1,27 +1,34 @@
 import React from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import { TfiText } from "react-icons/tfi";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { addTextBox } from "../Templates/slice/template.slice";
 
 const fontCombos = [
   {
     name: "Dancing Script + Poppins",
     helloFont: "font-dancing",
     friendFont: "font-poppins",
+    fontFamily: "Dancing Script",
   },
   {
     name: "Pacifico + Montserrat",
     helloFont: "font-pacifico",
     friendFont: "font-montserrat",
+    fontFamily: "Pacifico",
   },
   {
     name: "Poppins + Dancing Script",
     helloFont: "font-poppins",
     friendFont: "font-dancing",
+    fontFamily: "Poppins",
   },
   {
     name: "Montserrat + Pacifico",
     helloFont: "font-montserrat",
     friendFont: "font-pacifico",
+    fontFamily: "Montserrat",
   },
 ];
 
@@ -30,6 +37,38 @@ interface TextProps {
 }
 
 const Text: React.FC<TextProps> = ({ onFontSelect }) => {
+  const dispatch = useDispatch();
+  const templates = useSelector((state: RootState) => state.templates);
+
+  const addText = (
+    content: string,
+    fontSize: number,
+    fontFamily: string = "Arial"
+  ) => {
+    const targetId = templates.activeTemplateId;
+    if (!targetId || !templates[targetId]?.isCreated) {
+      alert("Please select a template first.");
+      return;
+    }
+    dispatch(
+      addTextBox({
+        templateId: targetId,
+        textBox: {
+          id: crypto.randomUUID(),
+          x: 80,
+          y: 80,
+          width: 180,
+          height: fontSize * 2.5,
+          content,
+          fontSize,
+          fontFamily,
+          color: "#000000",
+          zIndex: Date.now(),
+        },
+      })
+    );
+  };
+
   return (
     <>
       <div>
@@ -47,7 +86,10 @@ const Text: React.FC<TextProps> = ({ onFontSelect }) => {
         </div>
 
         {/* Buttons */}
-        <button className="bg-[#FF5733] w-full mt-5 cursor-pointer rounded-md flex items-center justify-center py-2.5 gap-3">
+        <button
+          onClick={() => addText("Text box", 14)}
+          className="bg-[#FF5733] w-full mt-5 cursor-pointer rounded-md flex items-center justify-center py-2.5 gap-3"
+        >
           <TfiText size={20} /> Add a text box
         </button>
         <button className="w-full mt-5 border cursor-pointer border-[#ffffff] rounded-md py-2.5">
@@ -55,15 +97,24 @@ const Text: React.FC<TextProps> = ({ onFontSelect }) => {
         </button>
 
         {/* Default text styling */}
-        <div className="pt-16">
-          <h2 className="text-white font-medium">Default Text Style</h2>
-          <button className="w-full mt-2 border cursor-pointer border-white rounded-md py-2.5 text-3xl">
+        <div className="pt-8">
+          <h2 className="text-white font-medium mb-2">Default Text Style</h2>
+          <button
+            onClick={() => addText("Add a heading", 28, "Arial")}
+            className="w-full mt-2 border cursor-pointer border-white rounded-md py-2.5 text-3xl text-white"
+          >
             Add a heading
           </button>
-          <button className="w-full mt-2 border cursor-pointer border-white rounded-md py-3 text-xl">
+          <button
+            onClick={() => addText("Add Subheading", 18, "Arial")}
+            className="w-full mt-2 border cursor-pointer border-white rounded-md py-3 text-xl text-white"
+          >
             Add Subheading
           </button>
-          <button className="w-full mt-2 border cursor-pointer border-white rounded-md py-4 text-sm">
+          <button
+            onClick={() => addText("Add a little bit of body text", 12, "Arial")}
+            className="w-full mt-2 border cursor-pointer border-white rounded-md py-4 text-sm text-white"
+          >
             Add a little bit of body text
           </button>
         </div>
@@ -76,10 +127,11 @@ const Text: React.FC<TextProps> = ({ onFontSelect }) => {
           {fontCombos.map((font) => (
             <button
               key={font.name}
-              className="h-24 bg-[#003366] rounded transition flex flex-col items-center justify-center text-2xl cursor-pointer"
-              onClick={() =>
-                onFontSelect(`${font.helloFont} ${font.friendFont}`)
-              }
+              className="h-24 bg-[#003366] rounded transition flex flex-col items-center justify-center text-2xl cursor-pointer hover:bg-[#004488]"
+              onClick={() => {
+                onFontSelect(`${font.helloFont} ${font.friendFont}`);
+                addText("Hello friend", 16, font.fontFamily);
+              }}
             >
               <span className={`${font.helloFont} text-white`}>Hello</span>
               <span className={`${font.friendFont} text-white`}>friend</span>

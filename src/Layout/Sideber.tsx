@@ -44,7 +44,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <div className="h-screen px-5 bg-[#003366] text-white flex flex-col py-8 items-center z-30">
+      <div className="h-screen px-5 bg-[#003366] text-white flex flex-col py-8 items-center z-30 flex-shrink-0">
         {/* Sidebar Items */}
         <div className="flex flex-col items-center gap-4">
           {/* Logo and Dropdown */}

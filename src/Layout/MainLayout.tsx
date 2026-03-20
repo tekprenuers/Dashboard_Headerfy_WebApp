@@ -99,23 +99,18 @@ const MainLayout: React.FC = () => {
         {/* Sidebar */}
         <Sidebr />
 
-        {/* Main Content Area */}
-        <div className="flex relative flex-col flex-1">
-          {/* Header */}
+        {/* Main column: header / canvas+drawer / footer */}
+        <div className="flex flex-col flex-1 min-w-0">
           <Header />
-          <TemplateDrawer showButton={!showDrawTool} />
 
-          {/* Page Content - with proper padding for footer */}
-          <div className="flex-1 bg-gray-100 lg:overflow-y-auto lg:overflow-x-auto flex flex-col pb-16">
-            <Outlet />
-            <div
-              className={`flex-1 transition-all duration-300 relative ${
-                isTemplateOpen ? "ml-[296px]" : "ml-0"
-              }`}
-            >
-              {/* <Outlet /> */}
+          {/* Middle row: drawer panel + scrollable canvas */}
+          <div className="flex-1 relative overflow-hidden">
+            <TemplateDrawer showButton={!showDrawTool} />
 
-              {showDrawTool && "Draw" && (
+            {/* Scrollable canvas area */}
+            <div className="h-full overflow-y-auto overflow-x-hidden bg-gray-100">
+              <Outlet />
+              {showDrawTool && (
                 <DrawTool
                   onClose={() => {
                     setShowDrawTool(false);
@@ -126,7 +121,6 @@ const MainLayout: React.FC = () => {
             </div>
           </div>
 
-          {/* Footer positioned properly */}
           <Footer />
         </div>
       </div>

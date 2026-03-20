@@ -23,16 +23,17 @@ const TemplateDrawer: React.FC<TemplateDrawerProps> = ({
   return (
     <div className="">
       <div
-        className={`absolute md:top-[89px] left-0 md:h-[82%] lg:top-[89px] lg:h-[82%] xl:top-[77px] xl:h-[86.9%] 2xl:h-[88.8%] 3xl:h-[93.2%] w-83 bg-[#003366F0] border-r z-20 
-          shadow-md transform transition-transform duration-300 
+        className={`absolute top-0 left-0 h-full w-83 bg-[#003366F0] border-r z-20
+          shadow-md transform transition-transform duration-300
           ${isTemplateOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="h-full overflow-y-auto">
           <h2 className="p-1 font-semibold text-lg text-white"></h2>
           <div className="p-3 text-white">
             {/* Show bars only if selected */}
-            {selectedTemplate === "Template" && <Template />}
-            {selectedTemplate === "Element" && <Elements />}
+            {selectedTemplate === "Template" && <Template isReadOnly={true} />}
+            {selectedTemplate === "Element" && <Elements  />
+}
             {selectedTemplate === "Text" && (
               <Text
                 onFontSelect={(font: string) => {
@@ -55,9 +56,9 @@ const TemplateDrawer: React.FC<TemplateDrawerProps> = ({
             }
           }}
           className={`
-          absolute top-70 bg-[#003366] border border-l-transparent border-[#003366f] text-white py-4 px-3 z-30
+          absolute top-1/2 -translate-y-1/2 bg-[#003366] border border-l-transparent border-[#003366f] text-white py-4 px-3 z-30
           transition-transform duration-300
-          ${isTemplateOpen ? "translate-x-83" : "translate-x-0 "}
+          ${isTemplateOpen ? "translate-x-83" : "translate-x-0"}
         `}
           style={{
             clipPath: "polygon(0% 0%, 100% 20%, 100% 80%, 0% 100%)",
@@ -77,3 +78,5 @@ const TemplateDrawer: React.FC<TemplateDrawerProps> = ({
 };
 
 export default TemplateDrawer;
+
+
